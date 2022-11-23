@@ -32,4 +32,3 @@ interface Applicative<A> extends Functor<A> {
 
 
 export default Applicative
-export { ApplicativeFn }

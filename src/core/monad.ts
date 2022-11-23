@@ -30,4 +30,3 @@ interface Monad<A> extends Applicative<A> {
 
 
 export default Monad
-export { MonadicFn }

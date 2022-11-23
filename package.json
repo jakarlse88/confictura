@@ -2,21 +2,49 @@
   "name": "fantasia",
   "version": "1.0.0",
   "description": "`RemoteData` implementation for handling async data fetching in a functional manner, inspired by and based on True-Myth.",
-  "main": "index.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jakarlse88/fantasia"
+  },
+  "bugs": {
+    "url": "https://github.com/jakarlse88/fantasia/issues"
+  },
+  "main": "dist/public/index.js",
+  "module": "dist/public/index.js",
+  "exports": {
+    ".": "./dist/public/index.js",
+    "./package.json": "./package.json",
+    "./*": "./dist/public/*.js"
+  },
+  "types": "dist/public/index.d.ts",
+  "keywords": [
+    "typescript",
+    "ts",
+    "functional programming",
+    "fp",
+    "monad",
+    "asyncdata",
+    "async data",
+    "async"
+  ],
   "scripts": {
+    "build": "pnpm tsc --project ./publish.tsconfig.json",
     "test": "mocha --require ts-node/register test/**/*.spec.ts",
-    "lint": "eslint . --ext  ts",
+    "test:coverage": "nyc mocha --require ts-node/register test/**/*.spec.ts && pnpm nyc report --reporter=html",
+    "clean": "rimraf ./dist",
+    "prepublishOnly": "pnpm test && pnpm build",
+    "postpublish": "pnpm clean",
+    "lint": "eslint . --ext .ts",
     "prepare": "husky install"
   },
-  "keywords": [
-    "ts",
-    "true-myth",
-    "functional",
-    "async",
-    "remote data"
-  ],
   "author": "Jon Karlsen",
   "license": "ISC",
+  "files": [
+    "*.d.ts",
+    "*.d.ts.map",
+    "dist",
+    "src"
+  ],
   "devDependencies": {
     "@types/chai": "^4.3.4",
     "@types/mocha": "^10.0.0",
@@ -27,7 +55,12 @@
     "eslint": "^8.28.0",
     "husky": "^8.0.0",
     "mocha": "^10.1.0",
+    "nyc": "^15.1.0",
+    "rimraf": "^3.0.2",
     "ts-node": "^10.9.1",
     "typescript": "^4.9.3"
+  },
+  "engines": {
+    "node": "14.* || 16.* || >= 18.*"
   }
 }

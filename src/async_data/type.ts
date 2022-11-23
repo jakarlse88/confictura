@@ -5,13 +5,15 @@
  * 
  */
 
-import { deepEqual } from "assert";
+
+import { valueEq } from '../internal/util'
 
 
 const notQueried = Symbol.for( 'not-queried' )
 const waiting    = Symbol.for( 'waiting' ) 
 const left       = Symbol.for( 'left' ) 
 const right      = Symbol.for( 'right' ) 
+const unit       = Symbol.for( 'unit' )
 
 
 type Case<E , A> = 
@@ -21,11 +23,11 @@ type Case<E , A> =
   | [ key : typeof right      , a : A ]
 
 
-type MatchObj<E , A , U> = {
-    notQueried : ()        => U
-    waiting    : ()        => U
-    failure    : ( e : E ) => U
-    success    : ( a : A ) => U 
+type MatchObj<E , A> = {
+    notQueried : ()        => void
+    waiting    : ()        => void
+    left       : ( e : E ) => E
+    right      : ( a : A ) => A 
 }
 
 
@@ -212,7 +214,7 @@ export class AsyncData<E , A> {
      *      @param fn 
      *      @returns 
      */
-    public mapErr<F>( fn : ( e : E ) => F ) : AsyncData<F , A> {
+    public mapLeft<F>( fn : ( e : E ) => F ) : AsyncData<F , A> {
         return (
             this._data[ 0 ] === left 
                 ? AsyncData.left( fn( this._data[ 1 ] ) )
@@ -285,23 +287,23 @@ export class AsyncData<E , A> {
     }
 
 
-    public match<U>( m : MatchObj<E , A , U> ) : U {
+    public caseOf( m : MatchObj<E , A> ) : void | E | A {
         switch ( this._data[ 0 ] ) {
             case notQueried : return m.notQueried()
             case waiting    : return m.waiting()
-            case left       : return m.failure( this._data[ 1 ] )
-            case right      : return m.success( this._data[ 1 ] )
+            case left       : return m.left(  this._data[ 1 ] )
+            case right      : return m.right( this._data[ 1 ] )
         }
     }
 
 
-    public eq( b : AsyncData<E , A> ) {
+    public eq<F , B>( this : AsyncData<E , A> , b : AsyncData<F , B> ) {
         switch ( this.kind ) 
         {
             case notQueried.description : return b.isNotQueried
             case    waiting.description : return b.isWaiting
-            case       left.description : return b.isLeft  && deepEqual( this.left  , b.left  )
-            case      right.description : return b.isRight && deepEqual( this.right , b.right )
+            case       left.description : return b.isLeft  && valueEq( this.left  , b.left  )
+            case      right.description : return b.isRight && valueEq( this.right , b.right )
             default                     : return false
         }
     }
@@ -309,4 +311,4 @@ export class AsyncData<E , A> {
 
 
 export default AsyncData
-export { notQueried , waiting , left as failure , right as success }
+export { notQueried , waiting , left , right }

@@ -27,5 +27,4 @@ interface Functor<A> {
 
 
 export default Functor
-export { FunctorFn }
 

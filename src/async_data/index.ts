@@ -1,5 +1,5 @@
-import { AsyncData }    from './type'
-import { notQueried , waiting , left , right } from './functions'
+import { AsyncData }                            from './type'
+import { notQueried , waiting , left , right }  from './functions'
 
 
 export { AsyncData }

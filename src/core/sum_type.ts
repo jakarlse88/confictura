@@ -6,14 +6,13 @@
  * 
  */
 
-
 type Case = {
     [ key : symbol ] : unknown[]
 }
 
 
 type Matcher = {
-    [ key : keyof Case ] : <A , B>( this : SumType<A> ) => B
+    [ key : keyof Case ] : <A extends Case, B extends Case>( this : SumType<A> ) => B
 }
 
 
@@ -22,11 +21,11 @@ abstract class SumType<A extends Case> {
     protected readonly _data : unknown
 
     constructor( c : keyof A , d : unknown ) {
-        this._case  = c
-        this._data  = d
+        this._case = c
+        this._data = d
     }
     
-    match : <B>( m : Matcher ) => B
+    abstract match<B>( m : Matcher ) : B
 }
 
 

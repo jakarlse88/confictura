@@ -1,6 +1,7 @@
 import { AsyncData }                    from '../src/index'
 import { expect }                       from 'chai'
-import { notQueried , waiting , right } from '../src/async_data'
+import { notQueried , waiting , right, left } from '../src/async_data'
+
 
 import 'mocha'
 
@@ -33,6 +34,37 @@ describe( 'AsyncData' , () => {
         it( '`fail` should throw' , () => {
             expect( () => sut.left ).to.throw()
         } )
+
+        it( '`kind` should return `notQueried`' , () => {
+            expect( sut.kind ).eq( 'not-queried' )
+        } )
+        
+        it( '`eq` should return `true` for equal cases values' , () => {
+            expect( sut.eq( sut ) ).true
+        } )
+
+        it( '`eq` should return `false` for case `waiting`' , () => {
+            expect( sut.eq( waiting() ) ).false
+        } )
+
+        it( '`eq` should return `false` for case `left`' , () => {
+            expect( sut.eq( left( "" ) as AsyncData<unknown , unknown> ) ).false
+        } )
+
+        it( '`eq` should return `false` for case `right`' , () => {
+            expect( sut.eq( right( "" ) as AsyncData<unknown , unknown> ) ).false
+        } )
+
+        it( '`caseOf` should execute correctly' , () => {
+            const result = sut.caseOf( {
+                notQueried: () => "notQueried"
+              , waiting   : () => "waiting"
+              , left      :  e => e ?? 'left' 
+              , right     :  v => v
+            } )
+
+            expect( result ).eq( 'notQueried' )
+        } )
     } )
 
 
@@ -62,10 +94,41 @@ describe( 'AsyncData' , () => {
         it( '`fail` should throw' , () => {
             expect( () => sut.left ).to.throw()
         } )
+
+        it( '`kind` should return `waiting`' , () => {
+            expect( sut.kind ).eq( 'waiting' )
+        } )
+
+        it( '`eq` should return `true` for equal cases values' , () => {
+            expect( sut.eq( sut ) ).true
+        } )
+
+        it( '`eq` should return `false` for case `notQueried`' , () => {
+            expect( sut.eq( notQueried() ) ).false
+        } )
+
+        it( '`eq` should return `false` for case `left`' , () => {
+            expect( sut.eq( left( "" ) as AsyncData<unknown , unknown> ) ).false
+        } )
+
+        it( '`eq` should return `false` for case `right`' , () => {
+            expect( sut.eq( right( "" ) as AsyncData<unknown , unknown> ) ).false
+        } )
+
+        it( '`caseOf` should execute correctly' , () => {
+            const result = sut.caseOf( {
+                notQueried: () => "notQueried"
+              , waiting   : () => "waiting"
+              , left      :  e => e ?? 'left' 
+              , right     :  v => v
+            } )
+
+            expect( result ).eq( 'waiting' )
+        } )
     } )
 
 
-    context( 'when case is `success`' , () => {
+    context( 'when case is `right`' , () => {
         const testVal = "This is a success!" 
         const sut     = right<string , string>( testVal )
         
@@ -91,6 +154,10 @@ describe( 'AsyncData' , () => {
 
         it( '`fail` should throw' , () => {
             expect( () => sut.left ).to.throw()
+        } )
+
+        it( '`kind` should return `right`' , () => {
+            expect( sut.kind ).eq( 'right' )
         } )
 
         it( '`map` executes correctly' , () => {
@@ -142,11 +209,61 @@ describe( 'AsyncData' , () => {
             expect( result.right ).not.empty
             expect( result.right ).eq( testVal.toUpperCase() + testVal.toLowerCase() )
         } )
+
+        it( '`mapLeft` do nothing' , () => {
+            const result = sut.mapLeft( x => x.toUpperCase() )
+
+            expect( result.isRight ).true
+            expect( result.right ).eq( sut.right ) 
+        } )
+
+        it( '`eq` should return `true` for equal cases/err values' , () => {
+            expect( sut.eq( sut ) ).true
+        } )
+
+        it( '`eq` should return `false` for same case/diff err vals' , () => {
+            expect( sut.eq( right( "Different val" ) ) ).false
+        } )
+
+        it( '`eq` should return `false` for case `waiting`' , () => {
+            expect( sut.eq( waiting() ) ).false
+        } )
+
+        it( '`eq` should return `false` for case `notQueried`' , () => {
+            expect( sut.eq( notQueried() ) ).false
+        } )
+
+        it( '`eq` should return `false` for case `right`' , () => {
+            expect( sut.eq( right( "" ) ) ).false
+        } )
+
+        it( '`caseOf` should execute correctly' , () => {
+            const result = sut.caseOf( {
+                notQueried: () => "notQueried"
+              , waiting   : () => "waiting"
+              , left      :  e => e ?? 'left' 
+              , right     :  v => v
+            } )
+
+            expect( result ).eq( sut.right )
+        } )
+
+        it( '`leftOr` should return its default value' , () => {
+            const result = sut.leftOr( 'default' )
+
+            expect( result ).eq( 'default' )
+        } )
+
+        it( '`rightOr` should return the wrapped value' , () => {
+            const result = sut.rightOr( 'default' )
+
+            expect( result ).eq( sut.right )
+        } )
     } )
 
 
-    context( 'when case is `failure`' , () => {
-        const sut = AsyncData.left( "This is an error!" )
+    context( 'when case is `left`' , () => {
+        const sut = AsyncData.left<string , string>( "This is an error!" )
         
         it( '`isNotQueried` should return `false`' , () => {
             expect( sut.isNotQueried ).false
@@ -168,8 +285,84 @@ describe( 'AsyncData' , () => {
             expect( () => sut.right ).to.throw()
         } )
 
+        it( '`kind` should return `left`' , () => {
+            expect( sut.kind ).eq( 'left' )
+        } )
+
         it( '`fail` should return the wrapped error' , () => {
             expect( sut.left ).not.empty
+        } )
+
+        it( '`map` should not be applied to err val' , () => {
+            const result = sut.map( x => x.toUpperCase() )
+
+            expect( result.isLeft ).true
+            expect( result.left ).eq( sut.left )
+        } ) 
+
+        it( '`fMap` should not be applied to err val' , () => {
+            const result = sut.map( x => right( x.toUpperCase() ) )
+
+            expect( result.isLeft ).true
+            expect( result.left ).eq( sut.left )
+        } ) 
+
+        it( '`ap` should not be applied to err val' , () => {
+            const fn     = ( x : string ) => right( x.toUpperCase() ) 
+            const result = right<string , typeof fn>( fn ).ap( sut ) 
+
+            expect( result.isLeft ).true
+            expect( result.left ).eq( sut.left )
+        } ) 
+
+        it( '`mapLeft` should map the error val' , () => {
+            const result = sut.mapLeft( x => x.toUpperCase() )
+
+            expect( result.isLeft ).true
+            expect( result.left ).eq( sut.left.toUpperCase() )
+        } )
+
+        it( '`eq` should return `true` for equal cases/err values' , () => {
+            expect( sut.eq( sut ) ).true
+        } )
+
+        it( '`eq` should return `false` for same case/diff err vals' , () => {
+            expect( sut.eq( left( "Different err" ) ) ).false
+        } )
+
+        it( '`eq` should return `false` for case `waiting`' , () => {
+            expect( sut.eq( waiting() ) ).false
+        } )
+
+        it( '`eq` should return `false` for case `notQueried`' , () => {
+            expect( sut.eq( notQueried() ) ).false
+        } )
+
+        it( '`eq` should return `false` for case `right`' , () => {
+            expect( sut.eq( right( "" ) ) ).false
+        } )
+
+        it( '`caseOf` should execute correctly' , () => {
+            const result = sut.caseOf( {
+                notQueried: () => "notQueried"
+              , waiting   : () => "waiting"
+              , left      :  e => e ?? 'left' 
+              , right     :  v => v
+            } )
+
+            expect( result ).eq( sut.left )
+        } )
+
+        it( '`rightOr` should return its default value' , () => {
+            const result = sut.rightOr( 'default' )
+
+            expect( result ).eq( 'default' )
+        } )
+
+        it( '`leftOr` should return the wrapped error value' , () => {
+            const result = sut.leftOr( 'default' )
+
+            expect( result ).eq( sut.left )
         } )
     } )
 } )

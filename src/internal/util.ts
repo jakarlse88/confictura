@@ -1,4 +1,4 @@
-const deepEqual = ( x : unknown , y : unknown ) => {
+const objEq = ( x : unknown , y : unknown ) => {
     if ( !isObject( x ) || !isObject( y ) )
         return false
 
@@ -9,12 +9,12 @@ const deepEqual = ( x : unknown , y : unknown ) => {
       return false
 
     for ( const k of xKeys ) {
-      const xVal = x[ k ]
-      const yVal = y[ k ]
+      const xVal = x[ k as keyof typeof x ] 
+      const yVal = y[ k as keyof typeof y ] 
 
       const areObjects = isObject( xVal ) && isObject( yVal )
       
-      if (  areObjects && !deepEqual( xVal , yVal ) 
+      if (  areObjects && !objEq( xVal , yVal ) 
         || !areObjects && xVal !== yVal )  
         return false
     }
@@ -27,12 +27,12 @@ const isObject = ( obj : unknown ) : obj is object =>
     obj != null && typeof obj === 'object'
 
 
-export const valueEquality = ( x : unknown , y : unknown ) : boolean => {
+export const valueEq = ( x : unknown , y : unknown ) : boolean => {
     if ( typeof x !== typeof y ) 
         return false
 
-    if ( typeof x !== 'object' )
+    if ( !isObject( x ) )
         return x === y
 
-    return deepEqual( x , y )
+    return objEq( x , y )
 }
