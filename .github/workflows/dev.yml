@@ -1,4 +1,4 @@
-name: [ DEV ] Build, lint, and test
+name: (DEV) Build, lint, and test
 
 on:
   push:
