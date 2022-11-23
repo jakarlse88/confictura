@@ -13,110 +13,38 @@ const notQueried = Symbol.for( 'not-queried' )
 const waiting    = Symbol.for( 'waiting' ) 
 const left       = Symbol.for( 'left' ) 
 const right      = Symbol.for( 'right' ) 
-const unit       = Symbol.for( 'unit' )
 
 
-type Case<E , A> = 
+type Case<L , R> = 
     [ key : typeof notQueried         ]
   | [ key : typeof waiting            ]
-  | [ key : typeof left       , e : E ]
-  | [ key : typeof right      , a : A ]
+  | [ key : typeof left       , l : L ]
+  | [ key : typeof right      , r : R ]
 
 
-type MatchObj<E , A> = {
+type MatchObj<L , R> = {
     notQueried : ()        => void
     waiting    : ()        => void
-    left       : ( e : E ) => E
-    right      : ( a : A ) => A 
+    left       : ( l : L ) => L
+    right      : ( r : R ) => R 
 }
 
 
 /**
  *      `AsyncData` implementation.
  * 
- *      @template E
- *      @template A    
+ *      @template L     The error type to be wrapped in potential `left` cases.
+ *      @template R     The value type to be wrapped in potential `right` cases. 
  * 
  */
-export class AsyncData<E , A> {
+export class AsyncData<L , R> {
 
     /**
      *      Constructor.
      * 
      */
-    private constructor( private _data : Case<E , A> ) {}
+    private constructor( private _data : Case<L , R> ) {}
 
-    
-    /**
-     *      Determine whether the `AsyncData` is a `notQueriedb.
-     * 
-     */
-    get isNotQueried() {
-        return this._data[ 0 ] === notQueried 
-    }
-
-
-    /**
-     *      Determine whether the `AsyncData` is a `waiting`.
-     * 
-     */
-    get isWaiting() : boolean {
-        return this._data[ 0 ] === waiting 
-    }
-
-
-    /**
-     *      Determine whether the `AsyncData` is a `failure`.
-     * 
-     */
-    get isLeft() : boolean {
-        return this._data[ 0 ] === left 
-    }
-
-
-    /**
-     *      Determine whether the `AsyncData` is a `success`.
-     * 
-     */
-    get isRight() : boolean {
-        return this._data[ 0 ] === right 
-    }
-
-
-    /**
-     *      Return the case of the {@link AsyncData}
-     *      (IE. `notQueried`, `waiting`, `left`, or `right`).
-     * 
-     */
-    get kind() : string {
-        return this._data[ 0 ].description ?? ''
-    }
-
-
-    /**
-     *      Get the value wrapped in this {@see AsyncData}.
-     *      Will throw if the {@see AsyncData} is not a `right`.
-     * 
-     */
-    get right() : A {
-        if ( this._data[ 0 ] !== right )
-            throw new Error( `Cannot get a value from a <${ this._data[ 0 ].description }>` )
-        
-        return this._data[ 1 ]
-    }
-
-
-    /**
-     *      Get the error wrapped in this {@see AsyncData}.
-     *      Will throw if the {@see AsyncData} is not a `left`.
-     */
-    get left() : E {
-        if ( this._data[ 0 ] !== left )
-            throw new Error( `Cannot get an error from a <${ this._data[ 0 ].description }>` )
-
-        return this._data[ 1 ]
-    }
-    
 
     /**
      *      Create an instance of `notQueried`.
@@ -183,6 +111,77 @@ export class AsyncData<E , A> {
      */
     static left<E , A>( e : E ) : AsyncData<E , A> { 
         return new AsyncData<E , A>( [ left , e ] ) 
+    }   
+
+
+    /**
+     *      Determine whether the `AsyncData` is a `notQueriedb.
+     * 
+     */
+    get isNotQueried() {
+        return this._data[ 0 ] === notQueried 
+    }
+
+
+    /**
+     *      Determine whether the `AsyncData` is a `waiting`.
+     * 
+     */
+    get isWaiting() : boolean {
+        return this._data[ 0 ] === waiting 
+    }
+
+
+    /**
+     *      Determine whether the `AsyncData` is a `failure`.
+     * 
+     */
+    get isLeft() : boolean {
+        return this._data[ 0 ] === left 
+    }
+
+
+    /**
+     *      Determine whether the `AsyncData` is a `success`.
+     * 
+     */
+    get isRight() : boolean {
+        return this._data[ 0 ] === right 
+    }
+
+
+    /**
+     *      Return the case of the {@link AsyncData}
+     *      (IE. `notQueried`, `waiting`, `left`, or `right`).
+     * 
+     */
+    get kind() : string {
+        return this._data[ 0 ].description ?? ''
+    }
+
+
+    /**
+     *      Get the value wrapped in this {@see AsyncData}.
+     *      Will throw if the {@see AsyncData} is not a `right`.
+     * 
+     */
+    get right() : R {
+        if ( this._data[ 0 ] !== right )
+            throw new Error( `Cannot get a value from a <${ this._data[ 0 ].description }>` )
+        
+        return this._data[ 1 ]
+    }
+
+
+    /**
+     *      Get the error wrapped in this {@see AsyncData}.
+     *      Will throw if the {@see AsyncData} is not a `left`.
+     */
+    get left() : L {
+        if ( this._data[ 0 ] !== left )
+            throw new Error( `Cannot get an error from a <${ this._data[ 0 ].description }>` )
+
+        return this._data[ 1 ]
     }
 
 
@@ -195,15 +194,13 @@ export class AsyncData<E , A> {
      *      @returns    A new `AsyncData` whose value is the result of the application 
      *                      of the function `fn` to the wrapped value.
      * 
-     *      @public
-     * 
      */
-    public map<B>( fn : ( a : A ) => B ) : AsyncData<E , B> {
+    public map<S>( fn : ( a : R ) => S ) : AsyncData<L , S> {
         return ( 
             this._data[ 0 ] === right
                 ? AsyncData.right( fn( this._data[ 1 ] ) ) 
                 : this 
-        ) as AsyncData<E , B>
+        ) as AsyncData<L , S>
     }
 
 
@@ -211,15 +208,17 @@ export class AsyncData<E , A> {
      *      Apply the function `fn` to the error wrapped in the {@see AsyncData}
      *      if it is a `left`.
      * 
-     *      @param fn 
-     *      @returns 
+     *      @param      fn  The function to apply to the error value wrapped in a `left` case of {@see AsyncData}. 
+     * 
+     *      @returns        A `left` case of {@see AsyncData} wrapping the transformed error value.
+     * 
      */
-    public mapLeft<F>( fn : ( e : E ) => F ) : AsyncData<F , A> {
+    public mapLeft<J>( fn : ( e : L ) => J ) : AsyncData<J , R> {
         return (
             this._data[ 0 ] === left 
                 ? AsyncData.left( fn( this._data[ 1 ] ) )
                 : this
-        ) as AsyncData<F ,  A>
+        ) as AsyncData<J ,  R>
     }
 
 
@@ -232,27 +231,28 @@ export class AsyncData<E , A> {
      *      @returns    A new `AsyncData` whose value is the result of the application
      *                      of the function `fn` to the wrapped value.
      * 
-     *      @public
-     * 
      */
-    public fMap<B>( fn : ( a : A ) => AsyncData<E , B> ) : AsyncData<E , B> {
+    public fMap<S>( fn : ( a : R ) => AsyncData<L , S> ) : AsyncData<L , S> {
         return (
             this._data[ 0 ] === right
                 ? fn( this._data[ 1 ] )
                 : this
-        ) as AsyncData<E , B>
+        ) as AsyncData<L , S>
     } 
 
 
     /**
-     *      Apply a function wrapped in an `AsyncData` to the value wrapped in another `AsyncData`,
+     *      Apply a function wrapped in an {@see AsyncData} to the value wrapped in another {@see AsyncData}
      *      if the latter is a `success`.
      *      
-     *      @param fn 
-     *      @param u 
+     *      @param this     The function to apply to the wrapped value. 
+     *      @param a        The {@see AsyncData}-wrapped value to which to apply the function.
+     * 
+     *      @return         The result of applying the given function to the given argument,
+     *                      wrapped in an {@see AsyncData}. 
      * 
      */
-    public ap<A , B>( this : ( AsyncData<E , ( a : A ) => B> ) , a : AsyncData<E , A> ) : AsyncData<E , B> {
+    public ap<R , S>( this : ( AsyncData<L , ( a : R ) => S> ) , a : AsyncData<L , R> ) : AsyncData<L , S> {
         return a.fMap( val => this.map( fn => fn( val ) ) )
     }
 
@@ -261,12 +261,12 @@ export class AsyncData<E , A> {
      *      Unwrap the value from an {@see AsyncData} if it is a `right`,
      *      otherwise return the provided default value.
      * 
-     *      @param dVal Default value to return if the `AsyncData` is not `success`.
+     *      @param dVal Default value to return if the {@see AsyncData} is not `right`.
      * 
-     *      @returns    The wrapped value, or a default value if the `AsyncData` is not `success`.
+     *      @returns    The wrapped value, or a default value if the {@see AsyncData} is not `right`.
      *  
      */
-    public rightOr( dVal : A ) : A {
+    public rightOr( dVal : R ) : R {
         return this._data[ 0 ] === right
             ? this._data[ 1 ]
             : dVal
@@ -277,17 +277,28 @@ export class AsyncData<E , A> {
      *      Unwrap the error from an {@see AsyncData} if it is a `left`, 
      *      otherwise return the provided default value.
      * 
-     *      @param dErr 
-     *      @returns 
+     *      @param dErr     Default value to return if the {@see AsyncData} is not `left`.
+     * 
+     *      @returns        The wrapped error value, or the supplied value if the {@see AsyncData} is not `left`.
+     * 
      */
-    public leftOr( dErr : E ) : E {
+    public leftOr( dErr : L ) : L {
         return this._data[ 0 ] === left
             ? this._data[ 1 ]
             : dErr
     }
 
-
-    public caseOf( m : MatchObj<E , A> ) : void | E | A {
+    /**
+     *      Apply a function to the error or value wrapped in an {@see AsyncData} based on its case. 
+     *      The supplied functions will receive no arguments if the case is `notQueried` or `waiting`,
+     *      the wrapped error value if the case if `left`, and the wrapped value if the case is `right`. 
+     *  
+     *      @param m    The {@see AsyncData} against which to match. 
+     *      
+     *      @returns    The result of applying the matching function to the wrapped value or lack thereof.
+     * 
+     */
+    public caseOf( m : MatchObj<L , R> ) : void | L | R {
         switch ( this._data[ 0 ] ) {
             case notQueried : return m.notQueried()
             case waiting    : return m.waiting()
@@ -296,8 +307,20 @@ export class AsyncData<E , A> {
         }
     }
 
-
-    public eq<F , B>( this : AsyncData<E , A> , b : AsyncData<F , B> ) {
+    /**
+     *      Determine whether two {@see AsyncData} instances are equal in terms of both
+     *      case and wrapped value.
+     * 
+     *      @param this     Base {@see AsyncData} with which to compare.
+     *      @param b        Incoming {@see AsyncData} against which to compare.    
+     *      
+     *      @returns        A boolean value indicating whether the two {@see AsyncData}
+     *                      instances are equal. 
+     * 
+     *      @public
+     * 
+     */
+    public eq<F , B>( this : AsyncData<L , R> , b : AsyncData<F , B> ) {
         switch ( this.kind ) 
         {
             case notQueried.description : return b.isNotQueried
