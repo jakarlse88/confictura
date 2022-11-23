@@ -42,11 +42,3 @@ export const right = <E , A>( a : A ) : AsyncData<E , A> =>
  */
 export const left = <E , A>( e : E ) : AsyncData<E , A> =>
     AsyncData.left<E , A>( e )
-
-
-/**
- *      @see AsyncData.ap
- * 
- */
-export const ap = <E , A , B>( a : AsyncData<E , A> , fn : ( AsyncData<E , ( a : A ) => B> ) ) : AsyncData<E , B> =>
-    a.fMap( a => fn.map( f => f( a ) ) )
