@@ -1,33 +1,48 @@
 /**
- *      Define {@link SumType}.
- * 
- *      @internal
- *      @module
- * 
+  
+    ███████╗██╗   ██╗███╗   ███╗    ████████╗██╗   ██╗██████╗ ███████╗
+    ██╔════╝██║   ██║████╗ ████║    ╚══██╔══╝╚██╗ ██╔╝██╔══██╗██╔════╝
+    ███████╗██║   ██║██╔████╔██║       ██║    ╚████╔╝ ██████╔╝█████╗  
+    ╚════██║██║   ██║██║╚██╔╝██║       ██║     ╚██╔╝  ██╔═══╝ ██╔══╝  
+    ███████║╚██████╔╝██║ ╚═╝ ██║       ██║      ██║   ██║     ███████╗
+    ╚══════╝ ╚═════╝ ╚═╝     ╚═╝       ╚═╝      ╚═╝   ╚═╝     ╚══════╝
+                                                                         
+  
+    @internal
+    @module
+  
  */
 
-type Case = {
-    [ key : symbol ] : unknown[]
+
+import Unit from './unit'
+
+
+type SumCase<T> = {
+    [ I in keyof T ] : T[ I ] 
 }
 
 
-type Matcher = {
-    [ key : keyof Case ] : <A extends Case, B extends Case>( this : SumType<A> ) => B
-}
+// TODO
+// type MatchObj<T extends SumCase<T>> = {
+//     [ K in keyof SumCase<T> ] : ( ...args : T[ K ]) => unknown
+// }
 
 
-abstract class SumType<A extends Case> {
-    protected readonly _case : keyof A
-    protected readonly _data : unknown
+abstract class SumType<T extends SumCase<T>> {
+    protected readonly __case : string
+    protected readonly __data : T[ keyof T ] | typeof Unit
 
-    constructor( c : keyof A , d : unknown ) {
-        this._case = c
-        this._data = d
+
+    protected constructor( c : string , d : T[ keyof T ] | typeof Unit ) {
+        this.__case = c
+        this.__data = d
     }
-    
-    abstract match<B>( m : Matcher ) : B
+
+
+    // TODO
+    // abstract caseOf( m : MatchObj<T> ) : void | unknown
 }
 
 
 export default SumType
-export { Case as State }
+export { SumCase }

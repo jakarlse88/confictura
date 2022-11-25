@@ -1,12 +1,17 @@
 /**
- *      Define {@link Monad}.
- * 
- *      @internal
- *      @module
- * 
+  
+    ███╗   ███╗ ██████╗ ███╗   ██╗ █████╗ ██████╗ 
+    ████╗ ████║██╔═══██╗████╗  ██║██╔══██╗██╔══██╗
+    ██╔████╔██║██║   ██║██╔██╗ ██║███████║██║  ██║
+    ██║╚██╔╝██║██║   ██║██║╚██╗██║██╔══██║██║  ██║
+    ██║ ╚═╝ ██║╚██████╔╝██║ ╚████║██║  ██║██████╔╝
+    ╚═╝     ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝  ╚═╝╚═════╝ 
+                                               
+  
+    @internal
+    @module
+  
  */
-
-import Applicative from "./applicative"
 
 
 /**
@@ -24,8 +29,8 @@ type MonadicFn<A , B> = ( a : A ) => Monad<B> // a -> M b
  *      @internal
  * 
  */
-interface Monad<A> extends Applicative<A> {
-    fMap<A , B>( this : Monad<A> , fn : MonadicFn<A , B> ) : Monad<B> // M a -> ( a-> M b ) -> M b
+interface Monad<A> {
+    fMap<B>( this : Monad<A> , fn : MonadicFn<A , B> ) : Monad<B> // M a -> ( a-> M b ) -> M b
 }
 
 
