@@ -1,3 +1,19 @@
+/**
+ 
+    ██╗   ██╗████████╗██╗██╗     ███████╗
+    ██║   ██║╚══██╔══╝██║██║     ██╔════╝
+    ██║   ██║   ██║   ██║██║     ███████╗
+    ██║   ██║   ██║   ██║██║     ╚════██║
+    ╚██████╔╝   ██║   ██║███████╗███████║
+     ╚═════╝    ╚═╝   ╚═╝╚══════╝╚══════╝
+           
+     
+    @internal
+    @module
+
+ */
+    
+
 const objEq = ( x : unknown , y : unknown ) => {
     if ( !isObject( x ) || !isObject( y ) )
         return false
@@ -27,7 +43,7 @@ const isObject = ( obj : unknown ) : obj is object =>
     obj != null && typeof obj === 'object'
 
 
-export const valueEq = ( x : unknown , y : unknown ) : boolean => {
+const valueEq = ( x : unknown , y : unknown ) : boolean => {
     if ( typeof x !== typeof y ) 
         return false
 
@@ -36,3 +52,6 @@ export const valueEq = ( x : unknown , y : unknown ) : boolean => {
 
     return objEq( x , y )
 }
+
+
+export { valueEq }

@@ -1,13 +1,17 @@
 /**
- *      Define {@link Applicative }.
- * 
- *      @internal
- *      @module
- * 
+
+     █████╗ ██████╗ ██████╗ ██╗     ██╗ ██████╗ █████╗ ████████╗██╗██╗   ██╗███████╗
+    ██╔══██╗██╔══██╗██╔══██╗██║     ██║██╔════╝██╔══██╗╚══██╔══╝██║██║   ██║██╔════╝
+    ███████║██████╔╝██████╔╝██║     ██║██║     ███████║   ██║   ██║██║   ██║█████╗  
+    ██╔══██║██╔═══╝ ██╔═══╝ ██║     ██║██║     ██╔══██║   ██║   ██║╚██╗ ██╔╝██╔══╝  
+    ██║  ██║██║     ██║     ███████╗██║╚██████╗██║  ██║   ██║   ██║ ╚████╔╝ ███████╗
+    ╚═╝  ╚═╝╚═╝     ╚═╝     ╚══════╝╚═╝ ╚═════╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═══╝  ╚══════╝
+
+   
+    @internal
+    @module
+   
  */
-
-
-import Functor from "./functor"
 
 
 /**
@@ -26,8 +30,8 @@ type ApplicativeFn<A , B> = ( a : A ) => B // ( a -> b )
  *      @internal
  * 
  */
-interface Applicative<A> extends Functor<A> {
-    ap<A , B>( this : Applicative<A> , fn : Applicative<ApplicativeFn<A , B>> ) : Applicative<B> // A a -> A ( a -> b ) -> A b
+interface Applicative<A> {
+    ap<B>( this : Applicative<A> , fn : Applicative<ApplicativeFn<A , B>> ) : Applicative<B> // A a -> A ( a -> b ) -> A b
 }
 
 

@@ -36,7 +36,7 @@ describe( 'AsyncData' , () => {
         } )
 
         it( '`kind` should return `notQueried`' , () => {
-            expect( sut.kind ).eq( 'not-queried' )
+            expect( sut.case ).eq( 'not-queried' )
         } )
         
         it( '`eq` should return `true` for equal cases values' , () => {
@@ -96,7 +96,7 @@ describe( 'AsyncData' , () => {
         } )
 
         it( '`kind` should return `waiting`' , () => {
-            expect( sut.kind ).eq( 'waiting' )
+            expect( sut.case ).eq( 'waiting' )
         } )
 
         it( '`eq` should return `true` for equal cases values' , () => {
@@ -157,7 +157,7 @@ describe( 'AsyncData' , () => {
         } )
 
         it( '`kind` should return `right`' , () => {
-            expect( sut.kind ).eq( 'right' )
+            expect( sut.case ).eq( 'right' )
         } )
 
         it( '`map` executes correctly' , () => {
@@ -286,7 +286,7 @@ describe( 'AsyncData' , () => {
         } )
 
         it( '`kind` should return `left`' , () => {
-            expect( sut.kind ).eq( 'left' )
+            expect( sut.case ).eq( 'left' )
         } )
 
         it( '`fail` should return the wrapped error' , () => {
