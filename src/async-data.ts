@@ -11,6 +11,6 @@
 
  */
 
-export { AsyncData }                            from './type'
-export { notQueried , waiting , left , right }  from './functions'
+
+export { AsyncData , notQueried , waiting , left , right } from './async_data/'
 

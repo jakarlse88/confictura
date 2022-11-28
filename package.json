@@ -10,7 +10,6 @@
     "url": "https://github.com/jakarlse88/gongsang/issues"
   },
   "main": "dist/public/index.js",
-  "module": "dist/public/index.js",
   "exports": {
     ".": "./dist/public/index.js",
     "./package.json": "./package.json",
