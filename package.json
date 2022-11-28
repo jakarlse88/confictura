@@ -1,13 +1,13 @@
 {
   "name": "confictura",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Functional types for fun and profit.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jakarlse88/async-data"
+    "url": "https://github.com/jakarlse88/confictura"
   },
   "bugs": {
-    "url": "https://github.com/jakarlse88/async-data/issues"
+    "url": "https://github.com/jakarlse88/confictura/issues"
   },
   "main": "dist/public/index.js",
   "exports": {

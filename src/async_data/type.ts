@@ -12,10 +12,10 @@ import   SumType        from '../core/sum_type'
 import   Unit           from '../core/unit'
 
 
-const notQueried = Symbol.for( 'not-queried' )
-const waiting    = Symbol.for( 'waiting' ) 
-const left       = Symbol.for( 'left' ) 
-const right      = Symbol.for( 'right' ) 
+const notQueried = Symbol.for( 'NotQueried' )
+const waiting    = Symbol.for( 'Waiting' ) 
+const left       = Symbol.for( 'Left' ) 
+const right      = Symbol.for( 'Right' ) 
 
 
 type NotQueried = [ key : 'notQueried' , val : typeof Unit ] 
@@ -172,7 +172,7 @@ export class AsyncData<L , R> extends SumType<Case<L, R>> {
 
    /**
     *      Return the case of the {@link AsyncData}
-    *      (IE. `notQueried`, `waiting`, `left`, or `right`).
+    *      (IE. `NotQueried`, `Waiting`, `Left`, or `Right`).
     * 
     */
     get case() : string {
@@ -327,6 +327,7 @@ export class AsyncData<L , R> extends SumType<Case<L, R>> {
             case right.description      : return m.Right( this.right )
         }
     }
+
 
    /**
     *      Determine whether two {@see AsyncData} instances are equal in terms of both
