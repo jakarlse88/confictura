@@ -25,7 +25,7 @@
     "test": "mocha --require ts-node/register test/**/*.spec.ts",
     "test:coverage": "nyc mocha --require ts-node/register test/**/*.spec.ts && pnpm nyc report --reporter=html",
     "clean": "rimraf ./dist",
-    "prepublishOnly": "pnpm test && pnpm build",
+    "prepublishOnly": "pnpm test && pnpm build && cp package.json dist/",
     "postpublish": "pnpm clean",
     "lint": "eslint . --ext .ts",
     "prepare": "husky install"
