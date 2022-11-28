@@ -38,7 +38,7 @@
     "prepare": "husky install"
   },
   "author": "Jon Karlsen",
-  "license": "ISC",
+  "license": "MIT",
   "files": [
     "*.d.ts",
     "*.d.ts.map",
