@@ -1,6 +1,6 @@
 {
   "name": "fantasia",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "`RemoteData` implementation for handling async data fetching in a functional manner, inspired by and based on True-Myth.",
   "repository": {
     "type": "git",
