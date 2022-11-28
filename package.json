@@ -1,13 +1,13 @@
 {
-  "name": "fantasia",
+  "name": "gongsang",
   "version": "1.0.1",
-  "description": "`RemoteData` implementation for handling async data fetching in a functional manner, inspired by and based on True-Myth.",
+  "description": "Functional types for fun and profit.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jakarlse88/fantasia"
+    "url": "https://github.com/jakarlse88/gongsang"
   },
   "bugs": {
-    "url": "https://github.com/jakarlse88/fantasia/issues"
+    "url": "https://github.com/jakarlse88/gongsang/issues"
   },
   "main": "dist/public/index.js",
   "module": "dist/public/index.js",
