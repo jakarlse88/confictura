@@ -1,6 +1,6 @@
-import { AsyncData }                    from '../src/index'
-import { expect }                       from 'chai'
-import { notQueried , waiting , right, left } from '../src/async_data'
+import { AsyncData }                            from '../src/async-data'
+import { expect }                               from 'chai'
+import { notQueried , waiting , right, left }   from '../src/async-data'
 
 
 import 'mocha'

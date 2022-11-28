@@ -9,13 +9,7 @@
   "bugs": {
     "url": "https://github.com/jakarlse88/confictura/issues"
   },
-  "main": "dist/public/index.js",
-  "exports": {
-    ".": "./dist/public/index.js",
-    "./package.json": "./package.json",
-    "./*": "./dist/public/*.js"
-  },
-  "types": "dist/public/index.d.ts",
+  "main": "",
   "keywords": [
     "typescript",
     "ts",
@@ -36,6 +30,15 @@
     "lint": "eslint . --ext .ts",
     "prepare": "husky install"
   },
+  "publishConfig": {
+    "directory": "dist",
+    "exports": {
+      "./async-data": "./dist/async-data/index.js"
+    },
+    "types": {
+      "./async-data": "./dist/async-data/index.d.ts"
+    }
+  },
   "author": "Jon Karlsen",
   "license": "MIT",
   "files": [
@@ -44,9 +47,6 @@
     "dist",
     "src"
   ],
-  "publishConfig": {
-    "access": "public"
-  },
   "devDependencies": {
     "@types/chai": "^4.3.4",
     "@types/mocha": "^10.0.0",
