@@ -32,10 +32,10 @@ type Case<L , R> =
 
 
 type MatchObj<L , R> = {
-    'notQueried' : ()        => void
-    'waiting'    : ()        => void
-    'left'       : ( l : L ) => L
-    'right'      : ( r : R ) => R 
+    'NotQueried' : ()        => void
+    'Waiting'    : ()        => void
+    'Left'       : ( l : L ) => L | void
+    'Right'      : ( r : R ) => R | void
 }
 
 
@@ -321,10 +321,10 @@ export class AsyncData<L , R> extends SumType<Case<L, R>> {
     */
     public caseOf( m : MatchObj<L , R> ) : void | L | R {
         switch ( this.case ) {
-            case notQueried.description : return m.notQueried()
-            case waiting.description    : return m.waiting()
-            case left.description       : return m.left(  this.left )
-            case right.description      : return m.right( this.right )
+            case notQueried.description : return m.NotQueried()
+            case waiting.description    : return m.Waiting()
+            case left.description       : return m.Left(  this.left )
+            case right.description      : return m.Right( this.right )
         }
     }
 

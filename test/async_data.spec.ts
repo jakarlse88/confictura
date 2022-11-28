@@ -57,10 +57,10 @@ describe( 'AsyncData' , () => {
 
         it( '`caseOf` should execute correctly' , () => {
             const result = sut.caseOf( {
-                notQueried: () => "notQueried"
-              , waiting   : () => "waiting"
-              , left      :  e => e ?? 'left' 
-              , right     :  v => v
+                NotQueried: () => "notQueried"
+              , Waiting   : () => "waiting"
+              , Left      :  e => e ?? 'left' 
+              , Right     :  v => v
             } )
 
             expect( result ).eq( 'notQueried' )
@@ -117,10 +117,10 @@ describe( 'AsyncData' , () => {
 
         it( '`caseOf` should execute correctly' , () => {
             const result = sut.caseOf( {
-                notQueried: () => "notQueried"
-              , waiting   : () => "waiting"
-              , left      :  e => e ?? 'left' 
-              , right     :  v => v
+                NotQueried: () => "notQueried"
+              , Waiting   : () => "waiting"
+              , Left      :  e => e ?? 'left' 
+              , Right     :  v => v
             } )
 
             expect( result ).eq( 'waiting' )
@@ -239,10 +239,10 @@ describe( 'AsyncData' , () => {
 
         it( '`caseOf` should execute correctly' , () => {
             const result = sut.caseOf( {
-                notQueried: () => "notQueried"
-              , waiting   : () => "waiting"
-              , left      :  e => e ?? 'left' 
-              , right     :  v => v
+                NotQueried: () => "notQueried"
+              , Waiting   : () => "waiting"
+              , Left      :  e => e ?? 'left' 
+              , Right     :  v => v
             } )
 
             expect( result ).eq( sut.right )
@@ -344,10 +344,10 @@ describe( 'AsyncData' , () => {
 
         it( '`caseOf` should execute correctly' , () => {
             const result = sut.caseOf( {
-                notQueried: () => "notQueried"
-              , waiting   : () => "waiting"
-              , left      :  e => e ?? 'left' 
-              , right     :  v => v
+                NotQueried: () => "notQueried"
+              , Waiting   : () => "waiting"
+              , Left      :  e => e ?? 'left' 
+              , Right     :  v => v
             } )
 
             expect( result ).eq( sut.left )
