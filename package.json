@@ -1,13 +1,13 @@
 {
-  "name": "gongsang",
+  "name": "@autumn-teacher/async-data",
   "version": "1.0.2",
   "description": "Functional types for fun and profit.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jakarlse88/gongsang"
+    "url": "https://github.com/jakarlse88/async-data"
   },
   "bugs": {
-    "url": "https://github.com/jakarlse88/gongsang/issues"
+    "url": "https://github.com/jakarlse88/async-data/issues"
   },
   "main": "dist/public/index.js",
   "exports": {
