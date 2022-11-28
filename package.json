@@ -1,5 +1,5 @@
 {
-  "name": "@autumn-teacher/async-data",
+  "name": "confictura",
   "version": "1.0.2",
   "description": "Functional types for fun and profit.",
   "repository": {
@@ -44,6 +44,9 @@
     "dist",
     "src"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "devDependencies": {
     "@types/chai": "^4.3.4",
     "@types/mocha": "^10.0.0",
