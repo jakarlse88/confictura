@@ -1,6 +1,6 @@
 {
   "name": "confictura",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Functional types for fun and profit.",
   "repository": {
     "type": "git",
@@ -28,7 +28,7 @@
   ],
   "scripts": {
     "build": "pnpm tsc --project ./publish.tsconfig.json",
-    "test": "ts-mocha -p ./tsconfig.json test/**/*.spec.ts",
+    "test": "ts-mocha -p ./test.tsconfig.json test/**/*.spec.ts",
     "test:coverage": "nyc ts-mocha -p ./tsconfig.json test/**/*.spec.ts && pnpm nyc report --reporter=html",
     "clean": "rimraf ./dist",
     "prepublishOnly": "pnpm test && pnpm build && pnpm rollup -c --bundleConfigAsCjs",

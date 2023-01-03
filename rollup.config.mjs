@@ -7,8 +7,9 @@ const config = defineConfig( [
     {
          input  : 'dist/async-data/index.js'
       , output  : {
-            file : 'index.js'
+            file      : 'index.js'
           , sourcemap : true  
+          , format    : 'es'
             }  
       , plugins : [
             typescript()
@@ -20,7 +21,7 @@ const config = defineConfig( [
             file : 'index.d.ts'
             } 
       , plugins : [
-            dts.default()
+            dts()
             ]  
         }  
     ] )
