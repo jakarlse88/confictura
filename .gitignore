@@ -4,6 +4,7 @@
 .nyc_output
 coverage
 dist
+.rollup.cache
 
 ### Node ###
 # Logs
